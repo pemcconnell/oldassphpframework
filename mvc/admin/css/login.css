@@ -1,0 +1,7 @@
+#content { padding-left:0; }
+#header { display:none; }
+#footer { position:fixed; bottom:0; left:0; right:0; }
+#loginform { position:relative; border:solid 5px #E5E5E5; background:#FFFFFF url('../imgs/form/inputbg.png') left top repeat-x; background:-webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF)); background:-moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px); padding:20px; margin:15px auto 0; width:400px; -webkit-box-shadow:0 4px 3px rgba(0,0,0,.3); -moz-box-shadow:0 4px 3px rgba(0,0,0,.3); box-shadow:0 4px 3px rgba(0,0,0,.3); }
+#loginform h1 { background:transparent url('../imgs/form/keys.png') right bottom no-repeat; }
+#loginform .validationMessage { width:312px; position:relative; left:31px; margin:0; }
+#loginform.toiform input[type="text"], #loginform.toiform input[type="password"], #loginform.toiform textarea { min-width:300px; }

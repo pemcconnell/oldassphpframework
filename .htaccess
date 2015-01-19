@@ -1,0 +1,209 @@
+## APACHE CONFIG
+## @author Peter McConnell <chief@domain.com>
+RewriteEngine On
+
+# XDEBUG
+php_flag xdebug.profiler_enable 1
+
+# ENVs
+ServerSignature EMail
+SetEnv SERVER_ADMIN chief@domain.com
+
+# TIMEOUTS
+php_value post_max_size 20M
+php_value upload_max_filesize 20M
+php_value max_execution_time 6000000
+php_value max_input_time 6000000
+php_value session.gc_maxlifetime 3600
+php_value output_buffering "0"
+
+# DISABLE MAGIC QUOTES
+php_flag magic_quotes_gpc off
+
+# DONT ALLOW THE FOLLOWING SCRIPT TYPES
+Options -Indexes
+Options -ExecCGI
+AddHandler cgi-script .pl .py .jsp .shtml .sh .asp .cgi
+
+# ADD TYPES
+AddType image/x-icon .ico
+AddType x-font/otf    .otf
+AddType x-font/ttf    .ttf
+AddType x-font/eot    .eot
+AddType x-font/woff   .woff
+
+# FORCE ENCODING
+AddDefaultCharset UTF-8
+
+# FORCE TYPE FOR CSS FILES (SOLVE HTACCESS CSS RE-ROUTING HTML MIME-TYPE PROBLEM)
+AddType text/css css
+<Files *.css>
+ForceType text/css
+</Files>
+
+# FONT SUPPORT
+AddOutputFilterByType DEFLATE x-font/otf x-font/ttf x-font/eot x-font/woff
+
+# ATTEMPT TO FAKE COOKIE-FREE IMAGES
+<FilesMatch "!\.(gif|jpe?g|png)$">
+    php_value session.cookie_domain example.com
+</FilesMatch>
+
+# CANONICAL FIXES
+RewriteCond %{HTTP_HOST} !^www\..* [NC]
+RewriteRule ^(.*)$ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NC]
+
+# ROUTE ALL ATTEMPTS TO LOAD PHP FILES DIRECTLY (EXCLUDING AJAX)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_FILENAME} .*?\.php.*?
+RewriteCond %{REQUEST_URI} !.*?/ajax/.*?
+RewriteCond %{REQUEST_URI} !.*?/fckeditor/.*?
+RewriteRule . index.php [L]
+
+# STOP MALLICIOUS BOTS / RIPPERS
+RewriteCond %{HTTP_USER_AGENT} ^Anarchie [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ASPSeek [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^attach [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^atraxbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^autoemailspider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Azureus [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^BlackWidow [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Black\ Hole [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Bot\ mailto:craftbot@yahoo.com [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^CherryPicker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ChinaClaw [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Custo [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^DISCo [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Download\ Demon [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^eCatch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EirGrabber [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EmailSiphon [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EmailWolf [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Express\ WebPictures [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ExtractorPro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^EyeNetIE [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^FlashGet [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^GetRight [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^GetWeb! [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^geohasher [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Go!Zilla [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Go-Ahead-Got-It [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^GrabNet [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Grafula [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^HMView [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} HTTrack [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Image\ Stripper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Image\ Sucker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} Indy\ Library [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^InterGET [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Internet\ Ninja [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^JetCar [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^JOC\ Web\ Spider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^larbin [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^LeechFTP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Mass\ Downloader [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^MIDown\ tool [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Mister\ PiX [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Navroad [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NearSite [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetAnts [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetMechanic [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetSpider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Net\ Vampire [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^NetZIP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Octopus [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Offline\ Explorer [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Offline\ Navigator [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^PageGrabber [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Papa\ Foto [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^pavuk [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^pcBrowser [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^PycURL [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Python-urllib [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^RealDownload [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^ReGet [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^research-scan-bot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SiteSnagger [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Sosospider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SmartDownload [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SuperBot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^SuperHTTP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Surfbot [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^tAkeOut [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Teleport\ Pro [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Titan [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^VoidEYE [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Web\ Image\ Collector [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Web\ Sucker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebAuto [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebCopier [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebFetch [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebGo\ IS [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebLeacher [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebReaper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebSauger [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Website\ eXtractor [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Website\ Quester [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebStripper [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebWhacker [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WebZIP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Wget [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Widow [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^WWWOFFLE [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Xaldon\ WebSpider [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Xenu [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Zeus.*Webster [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^Zeus
+RewriteRule ^.* - [F,L]
+
+# EXPIRES SUPPORT
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 seconds"
+  ExpiresByType text/html "access plus 1 seconds"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType image/gif "access plus 2592000 seconds"
+  ExpiresByType image/jpeg "access plus 2592000 seconds"
+  ExpiresByType image/png "access plus 2592000 seconds"
+  ExpiresByType text/css "access plus 604800 seconds"
+  ExpiresByType text/javascript "access plus 216000 seconds"
+  ExpiresByType application/x-javascript "access plus 216000 seconds"
+  ExpiresByType application/javascript "access plus 216000 seconds"
+</ifModule>
+<ifModule mod_headers.c>
+  <filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </filesMatch>
+  <filesMatch "\\.(css)$">
+    Header set Cache-Control "max-age=604800, public"
+  </filesMatch>
+  <filesMatch "\\.(js)$">
+    Header set Cache-Control "max-age=216000, private"
+  </filesMatch>
+  <filesMatch "\\.(xml|txt)$">
+    Header set Cache-Control "max-age=216000, public, must-revalidate"
+  </filesMatch>
+  <filesMatch "\\.(html|htm|php)$">
+    Header set Cache-Control "max-age=1, private, must-revalidate"
+  </filesMatch>
+</ifModule>
+
+## SUPPORT FOR NON-COMPRESSED FILES IF ITS NEEDED *.nocompress.php
+SetEnvIfNoCase Request_URI nocompress\.php$ no-gzip dont-vary
+
+# STOP BROWSER PREFETCHING
+SetEnvIfNoCase X-Forwarded-For .+ proxy=yes
+SetEnvIfNoCase X-moz prefetch no_access=yes
+RewriteCond %{ENV:no_access} yes
+RewriteRule .* - [F,L]
+
+## ROUTE PUBLIC FILES
+RewriteRule ^(css|scripts|imgs|ajax)/(.*)?$ mvc/frontend/$1/$2 [L,NC]
+RewriteRule ^([a-z]+/)(css|scripts|imgs|ajax)/(.*)?$ mvc/$1$2/$3 [L,NC]
+
+RewriteRule ^uploads/(.*)?$ tmp/uploads/$1 [L,NC]
+
+## ROUTE ALL
+RewriteCond %{REQUEST_URI} !.*?\.ico
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+RewriteRule ^(.*)?$ index.php?uri=$1 [L,QSA]

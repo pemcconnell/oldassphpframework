@@ -1,0 +1,13 @@
+# ZEUS
+match URL into $ with ^/admin/(css|scripts|imgs|ajax))/(.*)?$
+if not matched
+    match URL into $ with ^/(css|scripts|imgs|ajax))/(.*)?$
+    if not matched
+        match URL into $ with ^/(.*)?$
+        if matched then set URL = /index.php?uri=$1
+    else
+        set URL = /mvc/frontend/$1/$2
+    endif
+else
+    set URL = /mvc/admin/$1/$2
+endif

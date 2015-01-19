@@ -1,0 +1,12 @@
+<?phpclass StaffController extends AdminIndexController{
+	public function __construct()	{		parent::__construct();		$this->dbLayout['parent'] = false;	}
+	/** DATA HANDLING **/
+	public function setValidation()	{
+		$fields = array(			'name' => 'minlen'		);		return $fields;	}
+	public function inputDefaults()	{		$fields = array(			'online' => 1		);		return $fields;	}
+	protected function getAndSetFields()	{		$fields = array(			'name' => $this->getVal('name_txt'),			'job' => $this->getVal('job_txt'),			'summary' => $this->getVal('summary_txt'),			'content' => $this->getVal('content_txt'),			'tel' => $this->getVal('tel_txt'),			'email' => $this->getVal('email_txt'),			'online' => ($this->getVal('online_chk')) ? 1 : 0,			'imageId' => 0		);
+		if(isset($_POST['sub_btn'])) unset($fields['imageId']);		$fileId = $this->uploadFile('img_file');		if($fileId) $fields['imageId'] = $fileId;		return $fields;	}	/** END DATA HANDLING **/
+	# INDEX	public function index()	{		$this->templatevars['pageName'] = $this->cmsTitle('manage', 'Staff Members');		$this->templatevars['addButton'] = $this->cmsAddBtn('Staff Member');		$layout = array(			'_@CLASS:indent@__@name@_',			'_@CLASS:center@_<a href="./' . $this->mvc['CONTROLLER'] . '/edit/_@id@_" class="icon_edit" title="Edit this item">Edit</a>',			'_@CLASS:center@_<div class="sortOrderVisible">_@FUNC:createSorts@_</div>',			'_@CLASS:center@__@FUNC:createOnlineToggle@_',			'_@CLASS:center@_<a href="./' . $this->mvc['CONTROLLER'] . '/delete/_@id@_" onclick="return cms.deleteItem(this);" class="icon_delete" title="Delete this item">Delete</a>'		);
+		$aRows = $this->MODEL->getTblData($this->dbLayout);		$this->templatevars['pagedata'] = $this->cmsViewTable($this->dbLayout, $aRows, $layout);	}
+	public function editExt()	{		$this->templatevars['pageName'] = $this->cmsTitle($this->mvc['VIEW'], 'Staff Member');		// PREVIEW IMAGE		$this->templatevars['img_preview'] = false;		if($this->templatevars['inputvalue']['imageId'] != 0)		{			$fname = $this->MODEL->fetchFilenameById($this->templatevars['inputvalue']['imageId']);			if($fname) $this->templatevars['img_preview'] = BASE_HREF . 'uploads/cms_image/' . $fname;		}	}
+	public function __destruct()	{		parent::__destruct();	}}
